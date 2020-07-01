@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema targetNamespace="tdxassist.edf.rd.iop/DataTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dat="tdxassist.edf.rd.iop/DataTypes" xmlns:enu="tdxassist.edf.rd.iop/Enumerations">
+	<xsd:import namespace="tdxassist.edf.rd.iop/Enumerations" schemaLocation="TDXASSIST-Enumerations.xsd"/>
+	<xsd:complexType name="Action_Status">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the status of an object.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="value" type="dat:Status_String" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Main Core value Space.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Status_String">
+		<xsd:annotation>
+			<xsd:documentation>The identification of the status of an object.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:StatusTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="Amount_Decimal">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of a monetary value.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:decimal"/>
+	</xsd:simpleType>
+	<xsd:complexType name="AreaID_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of a domain, i.e. balance area, grid area, etc.
+
+In the ESMP context, it is an authorized issuing office that provides an agreed identification coding scheme for domain identification.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="dat:AreaID_String_value_ValueType">
+				<xsd:attribute name="codingScheme" use="required" type="enu:CodingSchemeTypeList">
+					<xsd:annotation>
+						<xsd:documentation>DomainQualification.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="AreaID_String_value_ValueType">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttributeValue_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of a given component.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="BusinessKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the business type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:BusinessTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="CurrencyCode_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of legal tender using ISO 4217 3 alpha codes.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:CurrencyTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="CurveType_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the type of curve.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:CurveTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="DirectionKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the direction of energy flow.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:DirectionTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="EnergyProductKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The identification of the nature of an energy product such as power, energy, reactive power, etc.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:EnergyProductTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="ESMP_DateTime">
+		<xsd:annotation>
+			<xsd:documentation>In ESMP, the dateTime shall be expressed in UTC as YYYY-MM-DDThh:mm:ssZ.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ESMP_DateTimeInterval">
+		<xsd:annotation>
+			<xsd:documentation>This datatype enables to express the start date and time, and the end date and time of a time interval with a specific pattern. This pattern is the YYYY-MM-DDThh:mmZ.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="start" type="dat:YMDHM_DateTime" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The start date and time of the interval with a minute resolution.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="end" type="dat:YMDHM_DateTime" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The end date and time of the interval with a minute resolution.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="YMDHM_DateTime">
+		<xsd:annotation>
+			<xsd:documentation>In ESMP, the date and time is expressed as "YYYY-MM-DDThh:mmZ", which conforms with ISO 8601 UTC time zone. This date and time is without the seconds.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ESMPBoolean_String">
+		<xsd:annotation>
+			<xsd:documentation>The attribute is a Boolean, either 0 or 1 value, "No" or "Yes", or two values defined in a code list.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:IndicatorTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="ESMPVersion_String">
+		<xsd:annotation>
+			<xsd:documentation>In ESMP, the coded value is restricted to digits.
+
+A code that distinguishes one evolution of an identified object from another. Information about a specific object may be sent several times, each transmission being identified by a different version number.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ID_String">
+		<xsd:annotation>
+			<xsd:documentation>A code to uniquely distinguish one occurrence of an entity from another.
+
+In the ESMP context, the code is defined either by:
+- an emitting company that provides an agreed identification unique within a business context such as capacity auction identification, market agreement identification, etc.
+- a party (originator of the exchange) that provides a unique identification in the framework of a business exchange such as document identification, time series identification, bid identification, ...</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="MarketRoleKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The identification of the role played by a party.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:RoleTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="MeasurementUnitKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of a unit of measure that is applied to a quantity. The measurement units shall be in compliance with UN/ECE Recommendation 20.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:UnitOfMeasureTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="MessageKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded type of a document.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:MessageTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="ObjectAggregationKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the aggregation object.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:ObjectAggregationTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="PartyID_String">
+		<xsd:annotation>
+			<xsd:documentation>The identification of an actor in the energy market.
+
+In the ESMP context, it is an authorized issuing office that provides an agreed identification coding scheme for market participant identification.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="dat:PartyID_String_value_ValueType">
+				<xsd:attribute name="codingScheme" use="required" type="enu:CodingSchemeTypeList">
+					<xsd:annotation>
+						<xsd:documentation>DomainQualification.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="PartyID_String_value_ValueType">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="Position_Integer">
+		<xsd:annotation>
+			<xsd:documentation>An integer value, this value is used as a sequential value representing the relative position of an entity within a space such as a time interval.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ProcessKind_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded identification of the nature of process.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:ProcessTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="PsrType_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded type of a power system resource.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:AssetTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="ReasonCode_String">
+		<xsd:annotation>
+			<xsd:documentation>The coded motivation of an act.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="enu:ReasonCodeTypeList"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="ReasonText_String">
+		<xsd:annotation>
+			<xsd:documentation>The textual explanation of an act as a string of characters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ResourceID_String">
+		<xsd:annotation>
+			<xsd:documentation>The identification of a resource object in the energy market.
+
+In the ESMP context, it is an authorized issuing office that provides an agreed identification coding scheme for resources (generator, lines, substations, etc.) identification.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="dat:ResourceID_String_value_ValueType">
+				<xsd:attribute name="codingScheme" use="required" type="enu:CodingSchemeTypeList">
+					<xsd:annotation>
+						<xsd:documentation>DomainQualification.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="ResourceID_String_value_ValueType">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+</xsd:schema>

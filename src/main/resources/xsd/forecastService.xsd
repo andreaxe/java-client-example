@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+  <xs:schema attributeFormDefault="unqualified"
+             elementFormDefault="qualified"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="pt.inesctec.sysflexserver.forecast"
+             targetNamespace="pt.inesctec.sysflexserver.forecast">
+
+    <xs:element name="forecastRequest">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element type="xs:string" name="networkID"/>
+          <xs:element type="tns:resultsType" name="results"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    <xs:element name="forecastResponse">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element type="xs:boolean" name="status"/>
+          <xs:element type="xs:string" name="message"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="primarySubstationTypeNodeType">
+      <xs:sequence>
+        <xs:element name="nodeID" type="xs:string"/>
+        <xs:element name="resourceID" type="xs:string"/>
+        <xs:element name="voltageV" type="tns:valueUnitType"/>
+        <xs:element name="currentI" type="tns:valueUnitType"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="energyConsumerNodeType">
+      <xs:sequence>
+        <xs:element name="nodeID" type="xs:string"/>
+        <xs:element name="resourceID" type="xs:string"/>
+        <xs:element name="powerFlowP" type="tns:valueUnitType"/>
+        <xs:element name="powerFlowQ" type="tns:valueUnitType"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="energyConsumerType">
+      <xs:sequence>
+        <xs:element type="tns:energyConsumerNodeType" name="energyConsumerNode" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Here is presented a list of the element node</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="generationUnitType">
+      <xs:sequence>
+        <xs:element type="tns:energyConsumerNodeType" name="generationUnitNode" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Here is presented a list of the element node (same structure for
+              energyConsumer and generationUnit</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="primarySubstationType">
+      <xs:sequence>
+        <xs:element type="tns:primarySubstationTypeNodeType" name="primarySubstationNode" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Aqui pode ser apresentado uma lista(array) do elemento node</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dataType">
+      <xs:sequence>
+        <xs:element type="tns:energyConsumerType" name="energyConsumer"/>
+        <xs:element type="tns:generationUnitType" name="generationUnit"/>
+        <xs:element type="tns:primarySubstationType" name="primarySubstation"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="resultType">
+      <xs:sequence>
+        <xs:element type="xs:dateTime" name="datetime"/>
+        <xs:element type="xs:dateTime" name="request">
+          <xs:annotation>
+            <xs:documentation>Request time of the result</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element type="tns:dataType" name="data"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="resultsType">
+      <xs:sequence>
+        <xs:element type="tns:resultType" name="result" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Aqui pode ser apresentado uma lista(array) do elemento result</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="valueUnitType">
+      <xs:sequence>
+        <xs:element type="xs:double" name="value"/>
+        <xs:element type="tns:unitType" name="unit"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="unitType" final="restriction">
+      <xs:annotation>
+        <xs:documentation><!-- MW or Mvar --></xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="kW"/>
+        <xs:enumeration value="MW"/>
+        <xs:enumeration value="GW"/>
+        <xs:enumeration value="kvar"/>
+        <xs:enumeration value="Mvar"/>
+        <xs:enumeration value="Gvar"/>
+        <xs:enumeration value="Mu"/>
+        <xs:enumeration value="A"/>
+        <xs:enumeration value="KA"/>
+        <xs:enumeration value="MA"/>
+        <xs:enumeration value="V"/>
+        <xs:enumeration value="Kv">
+          <xs:annotation>
+            <xs:documentation>Monetary Unit (€, $..)</xs:documentation>
+          </xs:annotation>
+        </xs:enumeration>
+      </xs:restriction>
+    </xs:simpleType>
+
+  </xs:schema>
