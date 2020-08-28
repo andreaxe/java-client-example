@@ -2,23 +2,27 @@ package inesctec.pt.tdx_sysflex_client;
 
 import ch.iec.tc57._2011.schema.message.*;
 
-import com.sun.xml.internal.ws.handler.HandlerException;
 import es.ree.eemws.client.common.ParentClient;
 import es.ree.eemws.core.utils.file.GZIPUtil;
 import es.ree.eemws.core.utils.iec61968100.EnumMessageFormat;
 import es.ree.eemws.core.utils.iec61968100.EnumVerb;
+import es.ree.eemws.core.utils.operations.HandlerException;
 import es.ree.eemws.core.utils.security.CryptoException;
 import es.ree.eemws.core.utils.security.CryptoManager;
 import es.ree.eemws.core.utils.xml.XMLElementUtil;
-import es.ree.eemws.core.utils.xml.XMLGregorianCalendarFactory;
 import forecast.sysflexserver.inesctec.pt.*;
+
 import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -30,15 +34,27 @@ import java.util.*;
 
 class MessageHelper {
 
-    public static ForecastRequest createForecastRequest(){
+    public static int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
+
+    public static ForecastRequest createForecastRequest() throws DatatypeConfigurationException {
 
         ForecastRequest forecastRequest = new ForecastRequest();
         forecastRequest.setNetworkID("NetworkID");
         ResultType resultType = new ResultType();
 
-        XMLGregorianCalendar datetime = XMLGregorianCalendarFactory.getGMTInstance(new Date());
-        resultType.setDatetime(datetime);
-        resultType.setRequest(datetime);
+        LocalDate localDate = LocalDate.of(2020, getRandomNumber(1,12), getRandomNumber(1, 26));
+        LocalTime localTime = LocalTime.of(getRandomNumber(1, 20), getRandomNumber(1, 59));
+        LocalDateTime dateTime = LocalDateTime.of(localDate, localTime);
+        System.out.println(dateTime.toString());
+
+        XMLGregorianCalendar xmlDateTime = DatatypeFactory.newInstance().
+                newXMLGregorianCalendar(dateTime.format(DateTimeFormatter.ISO_DATE_TIME));
+
+        resultType.setDatetime(xmlDateTime);
+        resultType.setRequest(xmlDateTime);
+
         DataType dataType = new DataType();
         EnergyConsumerType energyConsumerType = new EnergyConsumerType();
         EnergyConsumerNodeType energyConsumerNodeType = new EnergyConsumerNodeType();
@@ -47,7 +63,7 @@ class MessageHelper {
         valueUnitType.setUnit(UnitType.KVAR);
         valueUnitType.setValue(20.0);
         energyConsumerNodeType.setPowerFlowP(valueUnitType);
-        valueUnitType.setValue(30.0);
+        valueUnitType.setValue(40.0);
         energyConsumerNodeType.setPowerFlowQ(valueUnitType);
 
         energyConsumerType.getEnergyConsumerNode().add(energyConsumerNodeType);
@@ -66,8 +82,7 @@ class Client extends ParentClient {
 
     Client(){}
 
-    ResponseMessage send(RequestMessage requestMessage) throws HandlerException,
-            es.ree.eemws.core.utils.operations.HandlerException {
+    ResponseMessage send(RequestMessage requestMessage) throws HandlerException {
         return sendMessage(requestMessage);
     }
 }
@@ -77,7 +92,7 @@ public class TestClient {
     private static final String PRODUCTION_URL = "https://vcpes07.inesctec.pt/ws/request";
 
     public static void main(String[] args) throws IOException, JAXBException, CryptoException, InterruptedException,
-            HandlerException, es.ree.eemws.core.utils.operations.HandlerException {
+            es.ree.eemws.core.utils.operations.HandlerException, DatatypeConfigurationException {
 
         // this should be verified to add to the keystore and truststore the allowed certificates
         Path client_trust_store = Paths.get("certificates", "client_truststore.ks");
